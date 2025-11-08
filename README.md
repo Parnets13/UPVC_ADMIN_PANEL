@@ -19,7 +19,7 @@ A modern admin panel built with React, Vite, and Tailwind CSS for managing the U
 
 - Node.js (v14 or higher)
 - npm or yarn
-- Backend server running on `http://localhost:9000` (or configure in `.env`)
+- Backend server running on `https://upvc-backend-new.onrender.com` (or configure in `.env`)
 
 ## Installation
 
@@ -30,8 +30,8 @@ npm install
 
 2. Create a `.env` file in the root directory (optional):
 ```env
-VITE_API_BASE_URL=http://localhost:9000/api
-VITE_UPLOAD_BASE_URL=http://localhost:9000
+VITE_API_BASE_URL=https://upvc-backend-new.onrender.com/api
+VITE_UPLOAD_BASE_URL=https://upvc-backend-new.onrender.com
 ```
 
 3. Start the development server:
@@ -70,7 +70,7 @@ src/
 
 ## API Integration
 
-The admin panel connects to the backend API at `http://localhost:9000/api`. All API calls are handled through service files in the `src/services/` directory.
+The admin panel connects to the backend API at `https://upvc-backend-new.onrender.com/api`. All API calls are handled through service files in the `src/services/` directory.
 
 ## Technologies Used
 
