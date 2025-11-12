@@ -30,7 +30,7 @@ const Layout = ({ children }) => {
   };
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
+    <div className="flex h-screen w-full bg-gradient-to-br from-gray-50 via-white to-gray-50">
       {/* Sidebar */}
       <aside
         className={`${
@@ -160,7 +160,7 @@ const Layout = ({ children }) => {
 
         {/* Page Content */}
         <main className="flex-1 overflow-y-auto bg-gradient-to-br from-gray-50 via-white to-gray-50">
-          <div className="p-6 max-w-7xl mx-auto">
+          <div className="p-6 w-full">
             {children}
           </div>
         </main>

@@ -23,6 +23,29 @@ const SubCategories = () => {
     fetchData();
   }, []);
 
+  // Check if video URL is valid (not a placeholder)
+  const isValidVideoUrl = (url) => {
+    if (!url) return false;
+    const normalized = String(url).trim().toLowerCase();
+    
+    // List of placeholder/invalid URLs to filter out
+    const placeholderPatterns = [
+      'yourvideo.com',
+      'example.com',
+      'demo.mp4',
+      'placeholder',
+      'test.mp4',
+      'sample.mp4',
+      'http://example.com',
+      'https://example.com',
+      'http://yourvideo.com',
+      'https://yourvideo.com'
+    ];
+    
+    // Check if URL contains any placeholder pattern
+    return !placeholderPatterns.some(pattern => normalized.includes(pattern));
+  };
+
   const fetchData = async () => {
     try {
       setError(null);
@@ -178,7 +201,7 @@ const SubCategories = () => {
           <div key={subCategory._id} className="bg-white rounded-lg shadow-md p-4">
             <h3 className="text-xl font-semibold mb-2">{subCategory.name}</h3>
             <p className="text-sm text-gray-600 mb-2">{subCategory.description}</p>
-            {subCategory.videoUrl && (
+            {subCategory.videoUrl && isValidVideoUrl(subCategory.videoUrl) && (
               <div className="w-full h-40 rounded mb-3 overflow-hidden bg-black">
                 <video
                   src={

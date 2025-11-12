@@ -43,7 +43,12 @@ const Categories = () => {
       fetchCategories();
     } catch (error) {
       console.error('Error saving category:', error);
-      alert('Error saving category: ' + (error.response?.data?.message || error.message));
+      const errorMessage = 
+        error.response?.data?.message || 
+        error.response?.data?.error || 
+        error.message || 
+        'Failed to save category';
+      alert(`Error saving category: ${errorMessage}`);
     }
   };
 

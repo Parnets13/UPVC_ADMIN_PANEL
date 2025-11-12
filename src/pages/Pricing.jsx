@@ -14,6 +14,21 @@ const Pricing = () => {
     sponsorLogo: null,
   });
 
+  // Helper function to construct video URL
+  const getVideoUrl = (videoPath) => {
+    if (!videoPath) return null;
+    
+    // Remove leading slash if present to avoid double slashes
+    const cleanPath = videoPath.startsWith('/') ? videoPath : `/${videoPath}`;
+    
+    // Ensure UPLOAD_BASE_URL doesn't end with / and path starts with /
+    const baseUrl = API_CONFIG.UPLOAD_BASE_URL.endsWith('/') 
+      ? API_CONFIG.UPLOAD_BASE_URL.slice(0, -1) 
+      : API_CONFIG.UPLOAD_BASE_URL;
+    
+    return `${baseUrl}${cleanPath}`;
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -22,7 +37,15 @@ const Pricing = () => {
     setLoading(true);
     try {
       const response = await pricingService.getAllVideos();
-      setVideos(response.data || []);
+      const videosData = response.data || [];
+      console.log('Fetched videos:', videosData);
+      // Log video URLs for debugging
+      videosData.forEach(video => {
+        if (video.video) {
+          console.log(`Video URL for "${video.title}":`, getVideoUrl(video.video));
+        }
+      });
+      setVideos(videosData);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -98,10 +121,23 @@ const Pricing = () => {
           <div key={item._id} className="bg-white rounded-lg shadow-md p-4">
             {item.video && (
               <video
-                src={`${API_CONFIG.UPLOAD_BASE_URL}/${item.video}`}
+                src={getVideoUrl(item.video)}
                 className="w-full h-48 object-cover rounded mb-4"
                 controls
-              />
+                onError={(e) => {
+                  console.error('Video failed to load:', {
+                    originalPath: item.video,
+                    constructedUrl: getVideoUrl(item.video),
+                    error: e
+                  });
+                  e.target.style.display = 'none';
+                }}
+                onLoadStart={() => {
+                  console.log('Video loading:', getVideoUrl(item.video));
+                }}
+              >
+                Your browser does not support the video tag.
+              </video>
             )}
             <h3 className="text-xl font-semibold mb-2">
               {item.title}
@@ -182,10 +218,11 @@ const Pricing = () => {
                   <div className="mb-2">
                     <p className="text-xs text-gray-600 mb-1">Current Logo:</p>
                     <img
-                      src={`${API_CONFIG.UPLOAD_BASE_URL}/${editingItem.sponsorLogo}`}
+                      src={getVideoUrl(editingItem.sponsorLogo)}
                       alt="Current"
                       className="w-24 h-24 object-cover border rounded"
                       onError={(e) => {
+                        console.error('Sponsor logo failed to load:', getVideoUrl(editingItem.sponsorLogo));
                         e.target.style.display = 'none';
                       }}
                     />

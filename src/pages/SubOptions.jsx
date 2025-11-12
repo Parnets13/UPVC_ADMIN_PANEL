@@ -22,6 +22,29 @@ const SubOptions = () => {
     fetchData();
   }, []);
 
+  // Check if video URL is valid (not a placeholder)
+  const isValidVideoUrl = (url) => {
+    if (!url) return false;
+    const normalized = String(url).trim().toLowerCase();
+    
+    // List of placeholder/invalid URLs to filter out
+    const placeholderPatterns = [
+      'yourvideo.com',
+      'example.com',
+      'demo.mp4',
+      'placeholder',
+      'test.mp4',
+      'sample.mp4',
+      'http://example.com',
+      'https://example.com',
+      'http://yourvideo.com',
+      'https://yourvideo.com'
+    ];
+    
+    // Check if URL contains any placeholder pattern
+    return !placeholderPatterns.some(pattern => normalized.includes(pattern));
+  };
+
   // Normalize video URL: if absolute, use as-is; if relative, prepend base URL
   const normalizeVideoUrl = (url) => {
     if (!url) return null;
@@ -215,7 +238,7 @@ const SubOptions = () => {
         {subOptions.map((subOption) => (
           <div key={subOption._id} className="bg-white rounded-lg shadow-md p-4">
             <h3 className="text-xl font-semibold mb-2">{subOption.name}</h3>
-            {subOption.videoUrl && (
+            {subOption.videoUrl && isValidVideoUrl(subOption.videoUrl) && (
               <div className="mb-3 w-full h-40 rounded-lg overflow-hidden bg-black">
                 <video
                   src={normalizeVideoUrl(subOption.videoUrl)}
@@ -360,7 +383,7 @@ const SubOptions = () => {
                   </div>
                 </div>
                 {/* Video Preview */}
-                {(videoPreview || formData.videoUrl) && (
+                {(videoPreview || (formData.videoUrl && isValidVideoUrl(formData.videoUrl))) && (
                   <div className="mt-3 w-full h-40 rounded-lg overflow-hidden bg-black">
                     <video
                       src={videoPreview || normalizeVideoUrl(formData.videoUrl)}
